@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TutorIA — El tutor que siempre tiene tiempo para ti</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0d14;
+  --surface:#16161f;
+  --border:#252535;
+  --accent:#6c63ff;
+  --accent2:#ff6b6b;
+  --green:#22c55e;
+  --text:#f0f0f8;
+  --muted:#8888aa;
+  --r:14px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:16px;line-height:1.6;overflow-x:hidden}
+
+/* Glow bg */
+.glow1{position:fixed;width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(108,99,255,.1) 0%,transparent 70%);top:-300px;right:-200px;pointer-events:none;z-index:0}
+.glow2{position:fixed;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(255,107,107,.07) 0%,transparent 70%);bottom:-200px;left:-100px;pointer-events:none;z-index:0}
+
+/* Nav */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;background:rgba(13,13,20,.85);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.06)}
+.nav-logo{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;display:flex;align-items:center;gap:8px}
+.nav-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);animation:pulse 2s infinite}
+.nav-cta{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:9px 20px;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:.2s;text-decoration:none}
+.nav-cta:hover{background:#7c74ff;transform:translateY(-1px)}
+
+/* Hero */
+.hero{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:100px 24px 60px}
+.hero-inner{max-width:720px}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(108,99,255,.12);border:1px solid rgba(108,99,255,.25);border-radius:100px;padding:6px 16px;font-size:13px;color:#a5a0ff;margin-bottom:28px;font-weight:500}
+.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+h1{font-family:'Syne',sans-serif;font-size:clamp(36px,6vw,68px);font-weight:800;line-height:1.05;letter-spacing:-.03em;margin-bottom:20px}
+h1 .grad{background:linear-gradient(135deg,#a5a0ff,#ff6b6b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-sub{font-size:18px;color:var(--muted);max-width:500px;margin:0 auto 40px;line-height:1.7}
+.hero-price{display:inline-flex;flex-direction:column;align-items:center;gap:4px;margin-bottom:32px}
+.price-main{font-family:'Syne',sans-serif;font-size:52px;font-weight:800;color:var(--text);line-height:1}
+.price-main span{font-size:22px;color:var(--muted);font-weight:400}
+.price-sub{font-size:14px;color:var(--muted)}
+.price-compare{font-size:13px;color:var(--green);background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);border-radius:100px;padding:3px 12px;margin-top:4px}
+.cta-group{display:flex;flex-direction:column;align-items:center;gap:12px}
+.btn-main{display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:18px 40px;font-family:'Syne',sans-serif;font-weight:700;font-size:17px;cursor:pointer;transition:.2s;text-decoration:none}
+.btn-main:hover{background:#7c74ff;transform:translateY(-2px)}
+.btn-main .arrow{transition:.2s}
+.btn-main:hover .arrow{transform:translateX(4px)}
+.cta-note{font-size:13px;color:var(--muted)}
+
+/* Stats */
+.stats{position:relative;z-index:1;display:flex;justify-content:center;gap:0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--surface)}
+.stat{flex:1;max-width:200px;padding:28px 20px;text-align:center;border-right:1px solid var(--border)}
+.stat:last-child{border-right:none}
+.stat-n{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:var(--accent)}
+.stat-l{font-size:13px;color:var(--muted);margin-top:2px}
+
+/* Features */
+.section{position:relative;z-index:1;max-width:1000px;margin:0 auto;padding:80px 24px}
+.section-label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:12px}
+.section-title{font-family:'Syne',sans-serif;font-size:clamp(26px,4vw,40px);font-weight:800;letter-spacing:-.02em;margin-bottom:48px;line-height:1.15}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:700px){.features{grid-template-columns:1fr}}
+.feat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:24px;transition:.2s}
+.feat:hover{border-color:rgba(108,99,255,.3);transform:translateY(-2px)}
+.feat-icon{width:44px;height:44px;border-radius:10px;background:rgba(108,99,255,.12);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:16px}
+.feat-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px}
+.feat-desc{font-size:14px;color:var(--muted);line-height:1.6}
+
+/* Subjects */
+.subjects{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:0}
+@media(max-width:600px){.subjects{grid-template-columns:1fr 1fr}}
+.subj-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;align-items:center;gap:12px;transition:.2s}
+.subj-card:hover{border-color:rgba(108,99,255,.3)}
+.subj-emoji{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.subj-info{flex:1}
+.subj-name{font-size:14px;font-weight:600}
+.subj-lvl{font-size:11px;color:var(--muted);margin-top:1px}
+
+/* How it works */
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:700px){.steps-grid{grid-template-columns:1fr}}
+.step-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:28px;position:relative;overflow:hidden}
+.step-num{font-family:'Syne',sans-serif;font-size:56px;font-weight:800;color:rgba(108,99,255,.12);position:absolute;top:12px;right:20px;line-height:1}
+.step-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;margin-bottom:8px}
+.step-desc{font-size:14px;color:var(--muted);line-height:1.6}
+
+/* Testimonials */
+.testimonials{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:700px){.testimonials{grid-template-columns:1fr}}
+.testi{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:22px}
+.testi-text{font-size:14px;line-height:1.7;color:var(--muted);margin-bottom:16px;font-style:italic}
+.testi-text strong{color:var(--text);font-style:normal}
+.testi-author{display:flex;align-items:center;gap:10px}
+.testi-avatar{width:36px;height:36px;border-radius:50%;background:rgba(108,99,255,.2);display:flex;align-items:center;justify-content:center;font-size:15px}
+.testi-name{font-size:13px;font-weight:600}
+.testi-role{font-size:11px;color:var(--muted)}
+.stars{color:#fbbf24;font-size:12px;margin-bottom:10px}
+
+/* Pricing */
+.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:900px;margin:0 auto}
+@media(max-width:700px){.plans-grid{grid-template-columns:1fr}}
+.plan-card{background:var(--surface);border:1.5px solid var(--border);border-radius:20px;padding:28px;text-align:center;position:relative;transition:.2s}
+.plan-card:hover{transform:translateY(-3px)}
+.plan-card.popular{border-color:rgba(108,99,255,.5);background:linear-gradient(180deg,rgba(108,99,255,.06) 0%,var(--surface) 60%)}
+.popular-tag{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;padding:4px 14px;border-radius:100px;white-space:nowrap}
+.plan-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+.plan-price{font-family:'Syne',sans-serif;font-size:48px;font-weight:800;line-height:1;margin-bottom:2px}
+.plan-price sup{font-size:18px;vertical-align:top;margin-top:10px;display:inline-block;font-weight:400;color:var(--muted)}
+.plan-period{font-size:13px;color:var(--muted);margin-bottom:6px}
+.plan-saving{font-size:12px;color:var(--green);background:rgba(34,197,94,.1);border-radius:100px;padding:2px 10px;display:inline-block;margin-bottom:20px}
+.plan-features{text-align:left;margin-bottom:20px;border-top:1px solid var(--border);padding-top:16px}
+.pf{display:flex;align-items:flex-start;gap:8px;padding:5px 0;font-size:13px;color:var(--muted)}
+.pf-check{color:var(--green);font-size:13px;flex-shrink:0;margin-top:2px}
+/* Payment modal */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:200;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:#16161f;border:1px solid #252535;border-radius:20px;padding:32px;max-width:420px;width:100%;position:relative}
+.modal-close{position:absolute;top:14px;right:16px;background:none;border:none;color:#8888aa;font-size:22px;cursor:pointer;line-height:1}
+.modal-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:4px}
+.modal-sub{font-size:13px;color:#8888aa;margin-bottom:24px}
+.pay-methods{display:flex;flex-direction:column;gap:10px}
+.pay-btn{display:flex;align-items:center;gap:14px;padding:14px 18px;border-radius:12px;border:1.5px solid #252535;background:transparent;cursor:pointer;transition:.2s;text-decoration:none;color:#f0f0f8;font-family:'DM Sans',sans-serif}
+.pay-btn:hover{border-color:rgba(108,99,255,.5);background:rgba(108,99,255,.08);transform:translateX(3px)}
+.pay-btn-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.pay-btn-info{flex:1;text-align:left}
+.pay-btn-name{font-size:14px;font-weight:600}
+.pay-btn-desc{font-size:11px;color:#8888aa}
+.pay-btn-arrow{color:#8888aa;font-size:14px}
+.modal-note{font-size:11px;color:#8888aa;text-align:center;margin-top:16px;line-height:1.5}
+.btn-pay{display:block;width:100%;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:16px;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:.2s;text-decoration:none;text-align:center;margin-top:0}
+.btn-pay:hover{background:#7c74ff;transform:translateY(-1px)}
+
+/* FAQ */
+.faq{max-width:620px;margin:0 auto}
+.faq-item{border-bottom:1px solid var(--border);padding:20px 0;cursor:pointer}
+.faq-q{font-size:15px;font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.faq-q .icon{color:var(--muted);font-size:18px;flex-shrink:0;transition:.2s}
+.faq-a{font-size:14px;color:var(--muted);line-height:1.7;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease}
+.faq-item.open .faq-a{max-height:200px;padding-top:12px}
+.faq-item.open .icon{transform:rotate(45deg);color:var(--accent)}
+
+/* Footer */
+footer{position:relative;z-index:1;border-top:1px solid var(--border);padding:32px 24px;text-align:center;font-size:13px;color:var(--muted)}
+footer a{color:var(--accent);text-decoration:none}
+
+/* CTA bottom */
+.cta-bottom{position:relative;z-index:1;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:80px 24px;text-align:center}
+.cta-bottom h2{font-family:'Syne',sans-serif;font-size:clamp(24px,4vw,40px);font-weight:800;margin-bottom:12px;letter-spacing:-.02em}
+.cta-bottom p{color:var(--muted);margin-bottom:32px;font-size:16px}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+</style>
+</head>
+<body>
+<div class="glow1"></div>
+<div class="glow2"></div>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-logo"><div class="nav-dot"></div>TutorIA</div>
+  <a href="#pricing" class="nav-cta">Empezar ahora →</a>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">✦ Disponible 24/7 · Responde en segundos</div>
+    <h1>El tutor que<br><span class="grad">siempre tiene tiempo</span><br>para ti</h1>
+    <p class="hero-sub">Explica cualquier materia paso a paso, te da ejercicios resueltos y te prepara para las pruebas — como el mejor profe que tuviste, pero disponible a las 3 AM.</p>
+    <div class="hero-price">
+      <div class="price-main"><span>$</span>1.990</div>
+      <div class="price-sub">CLP · Planes desde 3 días hasta 1 mes</div>
+      <div class="price-compare">vs $30.000+ una clase particular</div>
+    </div>
+    <div class="cta-group">
+      <a href="#pricing" class="btn-main">Acceder ahora <span class="arrow">→</span></a>
+      <div class="cta-note">Pago seguro · Acceso inmediato · Sin contrato</div>
+    </div>
+  </div>
+</section>
+
+<!-- Stats -->
+<div class="stats">
+  <div class="stat"><div class="stat-n">12</div><div class="stat-l">Ramos disponibles</div></div>
+  <div class="stat"><div class="stat-n">24/7</div><div class="stat-l">Disponible siempre</div></div>
+  <div class="stat"><div class="stat-n">3</div><div class="stat-l">Modos de estudio</div></div>
+  <div class="stat"><div class="stat-n">IA</div><div class="stat-l">Adaptado a ti</div></div>
+</div>
+
+<!-- Features -->
+<div class="section">
+  <div class="section-label">¿Por qué TutorIA?</div>
+  <div class="section-title">Todo lo que necesitas<br>para aprobar</div>
+  <div class="features">
+    <div class="feat">
+      <div class="feat-icon">💡</div>
+      <div class="feat-title">Explicaciones claras</div>
+      <div class="feat-desc">Entiende cualquier concepto con ejemplos concretos y lenguaje simple. Sin tecnicismos innecesarios.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">✏️</div>
+      <div class="feat-title">Ejercicios resueltos</div>
+      <div class="feat-desc">Practica con ejercicios paso a paso del nivel exacto de tu ramo. Con tips para no olvidar el método.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">📝</div>
+      <div class="feat-title">Mini pruebas</div>
+      <div class="feat-desc">Evalúate antes del certamen. La IA hace preguntas, tú respondes y te dice qué fallaste y por qué.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🕐</div>
+      <div class="feat-title">Disponible 24/7</div>
+      <div class="feat-desc">A las 2 AM antes del certamen, en el metro, donde sea. Siempre está cuando lo necesitas.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">🇨🇱</div>
+      <div class="feat-title">Hecho para Chile</div>
+      <div class="feat-desc">Adaptado al currículo chileno — MINEDUC, PAES y universidades del CRUCH. Ejemplos en contexto local.</div>
+    </div>
+    <div class="feat">
+      <div class="feat-icon">💬</div>
+      <div class="feat-title">Conversación real</div>
+      <div class="feat-desc">No es un buscador. Le preguntas, él responde, tú repreguntas. Como hablar con un tutor de verdad.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Subjects -->
+<div class="section" style="padding-top:0">
+  <div class="section-label">Ramos disponibles</div>
+  <div class="section-title">Media y Universidad</div>
+  <div class="subjects">
+    <div class="subj-card"><div class="subj-emoji" style="background:#eff4ff">📐</div><div class="subj-info"><div class="subj-name">Cálculo I</div><div class="subj-lvl">Universidad</div></div></div>
+    <div class="subj-card"><div class="subj-emoji" style="background:#f0fdf4">📊</div><div class="subj-info"><div class="subj-name">Estadística</div><div class="subj-lvl">Universidad</div></div></div>
+    <div class="subj-card"><div class="subj-emoji" style="background:#fffbeb">⚡</div><div class="subj-info"><div class="subj-name">Física I</div><div class="subj-lvl">Universidad</div></div></div>
+    <div class="subj-card"><div class="subj-emoji" style="background:#fdf4ff">🧪</div><div class="subj-info"><div class="subj-name">Química General</div><div class="subj-lvl">Universidad</div></div></div>
+    <div class="subj-card"><div class="subj-emoji" style="background:#f0fdf4">💻</div><div class="subj-info"><div class="subj-name">Programación</div><div class="subj-lvl">Universidad</div></div></div>
+    <div class="subj-card"><div class="subj-emoji" style="background:#fff7ed">🧾</div><div class="subj-info"><div class="subj-name">Contabilidad</div><div class="subj-lvl">Universidad</div></div></div>
+    <div class="subj-card"><div class="subj-emoji" style="background:#f5f3ff">📐</div><div class="subj-info"><div class="subj-name">Matemática</div><div class="subj-lvl">Enseñanza Media</div></div></div>
+    <div class="subj-card"><div class="subj-emoji" style="background:#f0fdf4">🔬</div><div class="subj-info"><div class="subj-name">Ciencias</div><div class="subj-lvl">Enseñanza Media</div></div></div>
+    <div class="subj-card"><div class="subj-emoji" style="background:#fff7ed">🌎</div><div class="subj-info"><div class="subj-name">Historia</div><div class="subj-lvl">Enseñanza Media</div></div></div>
+    <div class="subj-card"><div class="subj-emoji" style="background:#fdf4ff">📖</div><div class="subj-info"><div class="subj-name">Lenguaje</div><div class="subj-lvl">Enseñanza Media</div></div></div>
+    <div class="subj-card"><div class="subj-emoji" style="background:#eff4ff">🇬🇧</div><div class="subj-info"><div class="subj-name">Inglés</div><div class="subj-lvl">Enseñanza Media</div></div></div>
+    <div class="subj-card"><div class="subj-emoji" style="background:#fdf4ff">🧠</div><div class="subj-info"><div class="subj-name">Filosofía</div><div class="subj-lvl">Enseñanza Media</div></div></div>
+  </div>
+</div>
+
+<!-- How it works -->
+<div class="section" style="padding-top:0">
+  <div class="section-label">¿Cómo funciona?</div>
+  <div class="section-title">En 3 pasos</div>
+  <div class="steps-grid">
+    <div class="step-card"><div class="step-num">1</div><div class="feat-icon">💳</div><div class="step-title">Elige tu plan</div><div class="step-desc">Desde $1.990 por 3 días hasta $9.990 por un mes. Paga con WebPay, Mercado Pago o transferencia.</div></div>
+    <div class="step-card"><div class="step-num">2</div><div class="feat-icon">📚</div><div class="step-title">Elige tu ramo</div><div class="step-desc">Selecciona el ramo que necesitas y el modo — explicar, ejercitar o mini prueba.</div></div>
+    <div class="step-card"><div class="step-num">3</div><div class="feat-icon">🎯</div><div class="step-title">Pregunta y aprende</div><div class="step-desc">Escribe tu duda y recibe una explicación clara al instante. Sin esperar, sin juicios.</div></div>
+  </div>
+</div>
+
+<!-- Testimonials -->
+<div class="section" style="padding-top:0">
+  <div class="section-label">Lo que dicen</div>
+  <div class="section-title">Estudiantes reales</div>
+  <div class="testimonials">
+    <div class="testi">
+      <div class="stars">★★★★★</div>
+      <div class="testi-text">"Reprobé Cálculo I dos veces. Con TutorIA <strong>por fin entendí los límites</strong> antes del certamen. Pasé con 5.2."</div>
+      <div class="testi-author"><div class="testi-avatar">👨</div><div><div class="testi-name">Matías R.</div><div class="testi-role">Ingeniería Civil · USACH</div></div></div>
+    </div>
+    <div class="testi">
+      <div class="stars">★★★★★</div>
+      <div class="testi-text">"Lo uso a las 11 PM antes de una prueba. <strong>Me hace mini pruebas y me explica lo que fallo.</strong> Es como tener un tutor personal."</div>
+      <div class="testi-author"><div class="testi-avatar">👩</div><div><div class="testi-name">Valentina S.</div><div class="testi-role">Enfermería · UCH</div></div></div>
+    </div>
+    <div class="testi">
+      <div class="stars">★★★★★</div>
+      <div class="testi-text">"Para la PAES me fue increíble. <strong>Historia y Matemática</strong> me las explicó con ejemplos que yo entendía. $3.990 una semana, eso es nada."</div>
+      <div class="testi-author"><div class="testi-avatar">👦</div><div><div class="testi-name">Diego M.</div><div class="testi-role">4° Medio · Santiago</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Pricing -->
+<div id="pricing" class="section" style="padding-top:0">
+  <div class="section-label">Elige tu plan</div>
+  <div class="section-title" style="text-align:center">Sin letra chica</div>
+  <div class="plans-grid">
+
+    <!-- Plan Prueba -->
+    <div class="plan-card">
+      <div class="plan-name">Prueba</div>
+      <div class="plan-price"><sup>$</sup>1.990</div>
+      <div class="plan-period">3 días · Sin compromiso</div>
+      <div class="plan-saving">Entra y prueba sin riesgo</div>
+      <div class="plan-features">
+        <div class="pf"><span class="pf-check">✓</span>12 ramos disponibles</div>
+        <div class="pf"><span class="pf-check">✓</span>Explicar, ejercicios y mini pruebas</div>
+        <div class="pf"><span class="pf-check">✓</span>Sin límite de preguntas</div>
+        <div class="pf"><span class="pf-check">✓</span>Sube tus apuntes (PDF)</div>
+      </div>
+      <button class="btn-pay" onclick="openModal('Prueba 3 días','1.990')">Pagar $1.990 →</button>
+    </div>
+
+    <!-- Plan Semanal (popular) -->
+    <div class="plan-card popular">
+      <div class="popular-tag">⚡ Más elegido</div>
+      <div class="plan-name">Semanal</div>
+      <div class="plan-price"><sup>$</sup>3.990</div>
+      <div class="plan-period">7 días · Acceso completo</div>
+      <div class="plan-saving">Ideal para época de certamenes</div>
+      <div class="plan-features">
+        <div class="pf"><span class="pf-check">✓</span>Todo el plan Prueba</div>
+        <div class="pf"><span class="pf-check">✓</span>Simulador de certamen con nota</div>
+        <div class="pf"><span class="pf-check">✓</span>Panel de progreso por tema</div>
+        <div class="pf"><span class="pf-check">✓</span>Historial de conversaciones</div>
+      </div>
+      <button class="btn-pay" onclick="openModal('Plan Semanal','3.990')">Pagar $3.990 →</button>
+    </div>
+
+    <!-- Plan Mensual -->
+    <div class="plan-card">
+      <div class="plan-name">Mensual</div>
+      <div class="plan-price"><sup>$</sup>9.990</div>
+      <div class="plan-period">30 días · Mejor valor</div>
+      <div class="plan-saving" style="background:rgba(108,99,255,.12);color:#a5a0ff">Ahorra 37% vs semanal</div>
+      <div class="plan-features">
+        <div class="pf"><span class="pf-check">✓</span>Todo el plan Semanal</div>
+        <div class="pf"><span class="pf-check">✓</span>Certámenes ilimitados</div>
+        <div class="pf"><span class="pf-check">✓</span>Seguimiento semestral</div>
+        <div class="pf"><span class="pf-check">✓</span>Soporte prioritario</div>
+      </div>
+      <button class="btn-pay" onclick="openModal('Plan Mensual','9.990')">Pagar $9.990 →</button>
+    </div>
+
+  </div>
+  <p style="text-align:center;font-size:13px;color:var(--muted);margin-top:20px">vs $25.000–$50.000 que cobra un profe particular por hora · Pago único sin renovación automática</p>
+</div>
+
+<!-- Modal de pago -->
+<div class="modal-overlay" id="payModal" onclick="closeModal(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="document.getElementById('payModal').classList.remove('open')">×</button>
+    <div class="modal-title">Elige cómo pagar</div>
+    <div class="modal-sub" id="modalSub">Plan Semanal · $3.990 CLP</div>
+    <div class="pay-methods">
+      <a class="pay-btn" id="payFlow" href="#" target="_blank">
+        <div class="pay-btn-icon" style="background:rgba(34,197,94,.15)">💳</div>
+        <div class="pay-btn-info">
+          <div class="pay-btn-name">WebPay / Tarjeta</div>
+          <div class="pay-btn-desc">Débito o crédito chilena · Transbank</div>
+        </div>
+        <span class="pay-btn-arrow">→</span>
+      </a>
+      <a class="pay-btn" id="payMP" href="#" target="_blank">
+        <div class="pay-btn-icon" style="background:rgba(0,160,227,.15)">🌐</div>
+        <div class="pay-btn-info">
+          <div class="pay-btn-name">Mercado Pago</div>
+          <div class="pay-btn-desc">Tarjeta internacional o saldo MP</div>
+        </div>
+        <span class="pay-btn-arrow">→</span>
+      </a>
+      <a class="pay-btn" id="payKhipu" href="#" target="_blank">
+        <div class="pay-btn-icon" style="background:rgba(108,99,255,.15)">🏦</div>
+        <div class="pay-btn-info">
+          <div class="pay-btn-name">Transferencia bancaria</div>
+          <div class="pay-btn-desc">Vía Khipu · Todos los bancos</div>
+        </div>
+        <span class="pay-btn-arrow">→</span>
+      </a>
+      <a class="pay-btn" href="https://wa.me/56900000000?text=Hola,%20quiero%20pagar%20TutorIA" target="_blank">
+        <div class="pay-btn-icon" style="background:rgba(34,197,94,.15)">💬</div>
+        <div class="pay-btn-info">
+          <div class="pay-btn-name">WhatsApp</div>
+          <div class="pay-btn-desc">Coordina pago directo con nosotros</div>
+        </div>
+        <span class="pay-btn-arrow">→</span>
+      </a>
+    </div>
+    <div class="modal-note">🔒 Pago seguro · Acceso inmediato tras confirmar · Sin renovación automática</div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="section" style="padding-top:0">
+  <div class="section-label">Preguntas frecuentes</div>
+  <div class="section-title" style="text-align:center;max-width:400px;margin:0 auto 40px">Todo lo que quieres saber</div>
+  <div class="faq">
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">¿Cómo accedo después de pagar? <span class="icon">+</span></div>
+      <div class="faq-a">Inmediatamente después del pago recibirás el link de acceso directo al tutor. Sin esperas.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">¿Cuántas preguntas puedo hacer? <span class="icon">+</span></div>
+      <div class="faq-a">Sin límite. Durante tu semana puedes hacer todas las preguntas que quieras en todos los ramos disponibles.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">¿Funciona para la PAES? <span class="icon">+</span></div>
+      <div class="faq-a">Sí. Los ramos de enseñanza media están adaptados al contenido PAES — Matemática, Ciencias, Historia y Lenguaje.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">¿Qué pasa si no entiendo la respuesta? <span class="icon">+</span></div>
+      <div class="faq-a">Le dices "no entendí" o "explícame de otra forma" y te lo vuelve a explicar diferente, con otro ejemplo. Es una conversación real.</div>
+    </div>
+    <div class="faq-item" onclick="toggleFaq(this)">
+      <div class="faq-q">¿Puedo renovar la semana? <span class="icon">+</span></div>
+      <div class="faq-a">Sí, puedes volver a pagar cuando quieras — antes de certamenes, en época de pruebas, cuando lo necesites.</div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA Bottom -->
+<div class="cta-bottom">
+  <h2>¿Tienes prueba pronto?</h2>
+  <p>Empieza ahora y llega preparado.</p>
+  <a href="#pricing" class="btn-main">Ver planes →</a>
+</div>
+
+<!-- Footer -->
+<footer>
+  <p>© 2026 TutorIA · Hecho en Chile 🇨🇱 · <a href="mailto:hola@tutoria.cl">hola@tutoria.cl</a></p>
+</footer>
+
+<script>
+function toggleFaq(el){el.classList.toggle('open');}
+
+// Links de Flow — reemplaza con tus tokens reales
+const FLOW_LINKS = {
+  'Prueba 3 días':  'https://www.flow.cl/app/web/checkoutLinkPago.php?token=LINK_PRUEBA',
+  'Plan Semanal':   'https://www.flow.cl/app/web/checkoutLinkPago.php?token=LINK_SEMANAL',
+  'Plan Mensual':   'https://www.flow.cl/app/web/checkoutLinkPago.php?token=LINK_MENSUAL',
+};
+const MP_LINKS = {
+  'Prueba 3 días':  'https://mpago.la/LINK_PRUEBA',
+  'Plan Semanal':   'https://mpago.la/LINK_SEMANAL',
+  'Plan Mensual':   'https://mpago.la/LINK_MENSUAL',
+};
+const KHIPU_LINKS = {
+  'Prueba 3 días':  'https://khipu.com/cobro/LINK_PRUEBA',
+  'Plan Semanal':   'https://khipu.com/cobro/LINK_SEMANAL',
+  'Plan Mensual':   'https://khipu.com/cobro/LINK_MENSUAL',
+};
+
+function openModal(plan, precio){
+  document.getElementById('modalSub').textContent = plan + ' · $' + precio + ' CLP';
+  document.getElementById('payFlow').href   = FLOW_LINKS[plan]  || '#';
+  document.getElementById('payMP').href     = MP_LINKS[plan]    || '#';
+  document.getElementById('payKhipu').href  = KHIPU_LINKS[plan] || '#';
+  document.getElementById('payModal').classList.add('open');
+}
+function closeModal(e){
+  if(e.target===document.getElementById('payModal'))
+    document.getElementById('payModal').classList.remove('open');
+}
+</script>
+</body>
+</html>
